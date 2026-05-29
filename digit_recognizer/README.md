@@ -8,8 +8,8 @@ A CNN trained on MNIST to recognize handwritten digits (0–9) with **99%+ accur
 
 ```bash
 pip install -r requirements.txt
-python train.py
-python -m streamlit run app/app.py
+python digit_recognizer/models/train_model.py
+python -m streamlit run digit_recognizer/app/app.py
 ```
 
 ---
@@ -19,69 +19,57 @@ python -m streamlit run app/app.py
 ```
 digit_recognizer/
 ├── app/
-│   └── app.py          ← Streamlit web app
+│   ├── app.py              # Streamlit web app
+│   └── predict.py          # Prediction logic
 ├── models/
-│   └── cnn_model.py    ← CNN architecture
-├── screenshots/        ← App screenshots
-├── train.py            ← Training pipeline
+│   ├── cnn_mnist.keras     # Trained model
+│   └── train_model.py      # Training script
+├── notebooks/
+│   └── explore.py          # Data exploration
+├── screenshots/            # App screenshots
 └── requirements.txt
 ```
 
 ---
 
-## 🌐 App Features
+## 🖥️ App Features
 
 ### ✏️ Draw a Digit
-
 Draw any digit on the canvas using your mouse. The model predicts it instantly with a confidence score.
 
-![Draw Tab](screenshots/app_draw.png)
-
----
-
-### 🎨 Drawing Canvas
-
-Draw on the black canvas — the model reads your stroke and classifies it as one of digits 0–9.
-
-![Canvas](screenshots/canvas_draw.jpg)
+![Draw a Digit](digit_recognizer/screenshots/draw.png)
 
 ---
 
 ### 🎯 Prediction Result
-
 Shows the predicted digit, confidence percentage, and a bar chart across all 10 classes.
 
-![Prediction](screenshots/prediction_result.jpg)
+![Prediction Result](digit_recognizer/screenshots/prediction.png)
 
 ---
 
 ### 📁 Upload an Image
-
 Upload any PNG or JPG of a handwritten digit. The model preprocesses it and returns a prediction.
 
-![Upload Tab](screenshots/app_upload.png)
+![Upload an Image](digit_recognizer/screenshots/upload.png)
 
 ---
 
-### 🧠 Model Architecture
-
+### 🧠 Model Info
 View the full CNN layer table — type, output shape, and parameter count for every layer.
 
-![Model Info](screenshots/app_model_info.png)
+![Model Info](digit_recognizer/screenshots/model_info.png)
 
 ---
 
-### 📋 Training Details
-
-Shows the complete 12-layer architecture and training configuration.
-
-![Model Details](screenshots/app_model_details.png)
+## 📊 Training Details
 
 | Detail | Value |
 |---|---|
 | Dataset | MNIST — 60K train / 10K test |
 | Optimizer | Adam + ReduceLROnPlateau |
 | Loss | Categorical Cross-Entropy |
+| Augmentation | Rotation ±10°, Zoom ±10%, Shifts ±10% |
 | Test Accuracy | > 99% |
 
 ---
@@ -92,12 +80,11 @@ Shows the complete 12-layer architecture and training configuration.
 Input (28×28×1)
   → Conv2D(32) → BatchNorm → Conv2D(32) → BatchNorm → MaxPool → Dropout(0.25)
   → Conv2D(64) → BatchNorm → Conv2D(64) → BatchNorm → MaxPool → Dropout(0.25)
-  → Conv2D(128) → BatchNorm → Dropout(0.25)
   → Flatten → Dense(256) → BatchNorm → Dropout(0.50)
   → Dense(10, Softmax)
 ```
 
-Total Parameters: ~870,000
+**Total Parameters:** ~870,000
 
 ---
 
